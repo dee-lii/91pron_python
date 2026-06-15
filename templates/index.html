@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>91视频爬虫管理器</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <h1>🎬 91视频爬虫管理器</h1>
+            <p class="subtitle">管理多个视频网站的爬取和下载任务</p>
+        </header>
+
+        <!-- 主要内容区 -->
+        <main class="main">
+            <!-- 左侧：任务配置 -->
+            <section class="config-panel">
+                <h2>📋 创建新任务</h2>
+
+                <!-- 1. 选择网站 -->
+                <div class="config-section">
+                    <h3>1. 选择网站</h3>
+                    <div class="site-selector">
+                        <button class="site-btn active" data-site="91pinse">
+                            <span class="site-name">91PinSe</span>
+                            <span class="site-desc">91PinSe视频</span>
+                        </button>
+                        <button class="site-btn" data-site="91porn">
+                            <span class="site-name">91Porn</span>
+                            <span class="site-desc">91Porn视频</span>
+                        </button>
+                        <button class="site-btn" data-site="truvaze">
+                            <span class="site-name">Truvaze</span>
+                            <span class="site-desc">Truvaze视频</span>
+                        </button>
+                        <button class="site-btn" data-site="xhotlist">
+                            <span class="site-name">XHotList</span>
+                            <span class="site-desc">X(Twitter)热门</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. 分类/筛选 -->
+                <div class="config-section">
+                    <h3>2. 分类/筛选</h3>
+
+                    <!-- 分类选择（91pinse 专用） -->
+                    <div id="category-section" class="filter-group">
+                        <label>分类关键词：</label>
+                        <div class="category-tags" id="category-tags">
+                            <!-- 动态生成 -->
+                        </div>
+                        <input type="text" id="custom-category" placeholder="或输入自定义关键词..." class="input-text">
+                    </div>
+
+                    <!-- 标签选择（xhotlist 专用） -->
+                    <div id="tag-section" class="filter-group" style="display:none;">
+                        <label>标签：</label>
+                        <div class="category-tags" id="tag-tags">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+
+                    <!-- 排序方式 -->
+                    <div id="sort-section" class="filter-group">
+                        <label>排序方式：</label>
+                        <select id="sort-select" class="select">
+                            <!-- 动态生成 -->
+                        </select>
+                    </div>
+
+                    <!-- 时间筛选 -->
+                    <div id="time-section" class="filter-group">
+                        <label>时间范围：</label>
+                        <select id="time-select" class="select">
+                            <!-- 动态生成 -->
+                        </select>
+                    </div>
+
+                    <!-- 时长筛选（xhotlist 专用） -->
+                    <div id="duration-section" class="filter-group" style="display:none;">
+                        <label>时长：</label>
+                        <select id="duration-select" class="select">
+                            <!-- 动态生成 -->
+                        </select>
+                    </div>
+
+                    <!-- 页数 -->
+                    <div class="filter-group">
+                        <label>抓取页数：</label>
+                        <input type="number" id="pages-input" value="3" min="1" max="100" class="input-number">
+                        <span class="hint">页</span>
+                    </div>
+
+                    <!-- 最大视频数 -->
+                    <div class="filter-group">
+                        <label>最大视频数：</label>
+                        <input type="number" id="max-videos-input" placeholder="不限" min="1" class="input-number">
+                        <span class="hint">留空表示不限</span>
+                    </div>
+                </div>
+
+                <!-- 3. 下载设置 -->
+                <div class="config-section">
+                    <h3>3. 下载设置</h3>
+
+                    <div class="filter-group">
+                        <label>
+                            <input type="checkbox" id="download-checkbox" checked>
+                            下载视频文件
+                        </label>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>下载目录：</label>
+                        <input type="text" id="download-dir" value="./downloads" class="input-text">
+                    </div>
+
+                    <div class="filter-group">
+                        <label>代理地址：</label>
+                        <input type="text" id="proxy-input" placeholder="留空不使用代理" class="input-text">
+                        <span class="hint">如: socks5://127.0.0.1:1080</span>
+                    </div>
+                </div>
+
+                <!-- 提交按钮 -->
+                <div class="config-actions">
+                    <button id="create-task-btn" class="btn btn-primary">
+                        🚀 创建并启动任务
+                    </button>
+                </div>
+            </section>
+
+            <!-- 右侧：任务列表 -->
+            <section class="tasks-panel">
+                <h2>📊 任务列表</h2>
+                <div id="tasks-list" class="tasks-list">
+                    <!-- 动态生成 -->
+                    <div class="empty-state">暂无任务</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 日志面板 -->
+        <section class="log-panel" id="log-panel" style="display:none;">
+            <div class="log-header">
+                <h3>📝 任务日志</h3>
+                <button id="close-log-btn" class="btn btn-small">关闭</button>
+            </div>
+            <div id="log-content" class="log-content">
+                <!-- 动态生成 -->
+            </div>
+        </section>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

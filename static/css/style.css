@@ -1,0 +1,452 @@
+/* ==================== 基础样式 ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #eee;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ==================== 头部 ==================== */
+.header {
+    text-align: center;
+    padding: 30px 0;
+}
+
+.header h1 {
+    font-size: 2.5em;
+    background: linear-gradient(90deg, #ff6b6b, #ffa500, #48dbfb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #888;
+    font-size: 1.1em;
+}
+
+/* ==================== 主布局 ==================== */
+.main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+/* ==================== 面板通用样式 ==================== */
+.config-panel,
+.tasks-panel {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.config-panel h2,
+.tasks-panel h2 {
+    font-size: 1.4em;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+/* ==================== 配置区域 ==================== */
+.config-section {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.config-section:last-of-type {
+    border-bottom: none;
+}
+
+.config-section h3 {
+    font-size: 1.1em;
+    color: #48dbfb;
+    margin-bottom: 15px;
+}
+
+/* ==================== 网站选择器 ==================== */
+.site-selector {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.site-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.site-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.site-btn.active {
+    background: rgba(72, 219, 251, 0.2);
+    border-color: #48dbfb;
+}
+
+.site-name {
+    display: block;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.site-desc {
+    display: block;
+    font-size: 0.85em;
+    color: #888;
+}
+
+/* ==================== 筛选组 ==================== */
+.filter-group {
+    margin-bottom: 15px;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #aaa;
+    font-size: 0.95em;
+}
+
+.filter-group input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* ==================== 分类标签 ==================== */
+.category-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.category-tag {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.category-tag:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.category-tag.active {
+    background: rgba(255, 107, 107, 0.3);
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+}
+
+/* ==================== 输入框样式 ==================== */
+.input-text,
+.input-number,
+.select {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.95em;
+    transition: border-color 0.2s ease;
+}
+
+.input-text:focus,
+.input-number:focus,
+.select:focus {
+    outline: none;
+    border-color: #48dbfb;
+}
+
+.input-number {
+    width: 120px;
+}
+
+.select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 30px;
+}
+
+.select option {
+    background: #1a1a2e;
+    color: #fff;
+}
+
+.hint {
+    display: inline-block;
+    margin-left: 8px;
+    color: #666;
+    font-size: 0.85em;
+}
+
+/* ==================== 按钮样式 ==================== */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    color: #fff;
+    font-weight: bold;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 0.85em;
+    background: rgba(255, 255, 255, 0.1);
+    color: #aaa;
+}
+
+.btn-small:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.config-actions {
+    margin-top: 20px;
+}
+
+/* ==================== 任务列表 ==================== */
+.tasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.task-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 18px;
+    transition: all 0.2s ease;
+}
+
+.task-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.task-site {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.task-site.91pinse { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+.task-site.91porn { background: rgba(255, 165, 0, 0.2); color: #ffa500; }
+.task-site.truvaze { background: rgba(72, 219, 251, 0.2); color: #48dbfb; }
+.task-site.xhotlist { background: rgba(46, 213, 115, 0.2); color: #2ed573; }
+
+.task-status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8em;
+}
+
+.task-status.created { background: rgba(255, 255, 255, 0.1); color: #aaa; }
+.task-status.running { background: rgba(72, 219, 251, 0.2); color: #48dbfb; }
+.task-status.completed { background: rgba(46, 213, 115, 0.2); color: #2ed573; }
+.task-status.failed { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+.task-status.stopped { background: rgba(255, 165, 0, 0.2); color: #ffa500; }
+.task-status.stopping { background: rgba(255, 165, 0, 0.2); color: #ffa500; }
+
+.task-info {
+    color: #888;
+    font-size: 0.85em;
+    margin-bottom: 12px;
+}
+
+.task-info span {
+    margin-right: 15px;
+}
+
+.task-progress {
+    margin-bottom: 12px;
+}
+
+.progress-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #48dbfb, #2ed573);
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 0.8em;
+    color: #888;
+}
+
+.task-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.task-actions .btn {
+    padding: 6px 12px;
+    font-size: 0.85em;
+}
+
+/* ==================== 空状态 ==================== */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+/* ==================== 日志面板 ==================== */
+.log-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(26, 26, 46, 0.98);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    max-height: 300px;
+    z-index: 1000;
+}
+
+.log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.log-header h3 {
+    color: #48dbfb;
+}
+
+.log-content {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 15px;
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+    font-size: 0.85em;
+    line-height: 1.6;
+}
+
+.log-entry {
+    color: #aaa;
+}
+
+.log-entry.error {
+    color: #ff6b6b;
+}
+
+.log-entry.success {
+    color: #2ed573;
+}
+
+/* ==================== 滚动条 ==================== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 1024px) {
+    .main {
+        grid-template-columns: 1fr;
+    }
+
+    .site-selector {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .header h1 {
+        font-size: 1.8em;
+    }
+
+    .site-selector {
+        grid-template-columns: 1fr;
+    }
+}
