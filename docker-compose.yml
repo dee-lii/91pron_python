@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  spider-web:
+    build: .
+    container_name: 91-spider-web
+    ports:
+      - "8080:8080"
+    volumes:
+      # 持久化下载的视频
+      - ./downloads:/app/downloads
+      # 持久化任务数据
+      - ./data:/app/data
+    environment:
+      - TZ=Asia/Shanghai
+    restart: unless-stopped

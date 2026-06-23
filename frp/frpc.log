@@ -1,0 +1,67 @@
+[1;34m2026-01-29 10:58:05.788 [I] [sub/root.go:159] start frpc service for config file [frpc.toml]
+[0m[1;34m2026-01-29 10:58:05.789 [I] [client/service.go:331] try to connect to server...
+[0m[1;34m2026-01-29 10:58:05.812 [I] [client/service.go:323] [f7ed7bf0dec748ba] login to server success, get run id [f7ed7bf0dec748ba]
+[0m[1;34m2026-01-29 10:58:05.812 [I] [proxy/proxy_manager.go:180] [f7ed7bf0dec748ba] proxy added: [mac_38080]
+[0m[1;34m2026-01-29 10:58:05.816 [I] [client/control.go:172] [f7ed7bf0dec748ba] [mac_38080] start proxy success
+[0m[1;31m2026-01-29 22:37:23.893 [E] [proxy/proxy.go:202] [f7ed7bf0dec748ba] [mac_38080] connect to local service [127.0.0.1:18789] error: dial tcp 127.0.0.1:18789: connect: connection refused
+[0m[1;34m2026-01-30 10:31:34.471 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;34m2026-01-30 10:31:35.941 [I] [client/service.go:323] [f7ed7bf0dec748ba] login to server success, get run id [f7ed7bf0dec748ba]
+[0m[1;34m2026-01-30 10:31:35.941 [I] [proxy/proxy_manager.go:180] [f7ed7bf0dec748ba] proxy added: [mac_38080]
+[0m[1;34m2026-01-30 10:31:35.951 [I] [client/control.go:172] [f7ed7bf0dec748ba] [mac_38080] start proxy success
+[0m[1;34m2026-01-30 13:46:45.671 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;34m2026-01-30 13:46:45.694 [I] [client/service.go:323] [f7ed7bf0dec748ba] login to server success, get run id [f7ed7bf0dec748ba]
+[0m[1;34m2026-01-30 13:46:45.694 [I] [proxy/proxy_manager.go:180] [f7ed7bf0dec748ba] proxy added: [mac_38080]
+[0m[1;34m2026-01-30 13:46:45.698 [I] [client/control.go:172] [f7ed7bf0dec748ba] [mac_38080] start proxy success
+[0m[1;34m2026-01-31 17:34:47.155 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;33m2026-01-31 17:34:50.046 [W] [client/service.go:334] [f7ed7bf0dec748ba] connect to server error: EOF
+[0m[1;34m2026-01-31 17:34:52.065 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;33m2026-01-31 17:34:55.665 [W] [client/service.go:334] [f7ed7bf0dec748ba] connect to server error: session shutdown
+[0m[1;34m2026-01-31 17:34:59.895 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;33m2026-01-31 17:35:02.148 [W] [client/service.go:334] [f7ed7bf0dec748ba] connect to server error: EOF
+[0m[1;34m2026-01-31 17:35:10.822 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;33m2026-01-31 17:35:14.885 [W] [client/service.go:334] [f7ed7bf0dec748ba] connect to server error: session shutdown
+[0m[1;34m2026-01-31 17:35:32.493 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;34m2026-01-31 17:35:33.374 [I] [client/service.go:323] [f7ed7bf0dec748ba] login to server success, get run id [f7ed7bf0dec748ba]
+[0m[1;34m2026-01-31 17:35:33.374 [I] [proxy/proxy_manager.go:180] [f7ed7bf0dec748ba] proxy added: [mac_38080]
+[0m[1;34m2026-01-31 17:35:33.379 [I] [client/control.go:172] [f7ed7bf0dec748ba] [mac_38080] start proxy success
+[0m[1;34m2026-02-03 00:51:28.188 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;34m2026-02-03 00:51:28.214 [I] [client/service.go:323] [f7ed7bf0dec748ba] login to server success, get run id [f7ed7bf0dec748ba]
+[0m[1;34m2026-02-03 00:51:28.214 [I] [proxy/proxy_manager.go:180] [f7ed7bf0dec748ba] proxy added: [mac_38080]
+[0m[1;34m2026-02-03 00:51:28.220 [I] [client/control.go:172] [f7ed7bf0dec748ba] [mac_38080] start proxy success
+[0m[1;34m2026-02-05 06:56:29.731 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;34m2026-02-05 06:56:29.758 [I] [client/service.go:323] [f7ed7bf0dec748ba] login to server success, get run id [f7ed7bf0dec748ba]
+[0m[1;34m2026-02-05 06:56:29.758 [I] [proxy/proxy_manager.go:180] [f7ed7bf0dec748ba] proxy added: [mac_38080]
+[0m[1;34m2026-02-05 06:56:29.763 [I] [client/control.go:172] [f7ed7bf0dec748ba] [mac_38080] start proxy success
+[0m[1;34m2026-02-07 16:30:34.954 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;34m2026-02-07 16:30:34.978 [I] [client/service.go:323] [f7ed7bf0dec748ba] login to server success, get run id [f7ed7bf0dec748ba]
+[0m[1;34m2026-02-07 16:30:34.978 [I] [proxy/proxy_manager.go:180] [f7ed7bf0dec748ba] proxy added: [mac_38080]
+[0m[1;34m2026-02-07 16:30:34.983 [I] [client/control.go:172] [f7ed7bf0dec748ba] [mac_38080] start proxy success
+[0m[1;34m2026-02-10 02:18:06.519 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;34m2026-02-10 02:18:06.543 [I] [client/service.go:323] [f7ed7bf0dec748ba] login to server success, get run id [f7ed7bf0dec748ba]
+[0m[1;34m2026-02-10 02:18:06.543 [I] [proxy/proxy_manager.go:180] [f7ed7bf0dec748ba] proxy added: [mac_38080]
+[0m[1;34m2026-02-10 02:18:06.547 [I] [client/control.go:172] [f7ed7bf0dec748ba] [mac_38080] start proxy success
+[0m[1;34m2026-02-11 14:37:46.877 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;34m2026-02-11 14:37:46.915 [I] [client/service.go:323] [f7ed7bf0dec748ba] login to server success, get run id [f7ed7bf0dec748ba]
+[0m[1;34m2026-02-11 14:37:46.915 [I] [proxy/proxy_manager.go:180] [f7ed7bf0dec748ba] proxy added: [mac_38080]
+[0m[1;34m2026-02-11 14:37:46.922 [I] [client/control.go:172] [f7ed7bf0dec748ba] [mac_38080] start proxy success
+[0m[1;34m2026-02-13 23:01:22.648 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;34m2026-02-13 23:01:22.670 [I] [client/service.go:323] [f7ed7bf0dec748ba] login to server success, get run id [f7ed7bf0dec748ba]
+[0m[1;34m2026-02-13 23:01:22.670 [I] [proxy/proxy_manager.go:180] [f7ed7bf0dec748ba] proxy added: [mac_38080]
+[0m[1;34m2026-02-13 23:01:22.674 [I] [client/control.go:172] [f7ed7bf0dec748ba] [mac_38080] start proxy success
+[0m[1;34m2026-02-16 08:50:18.401 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;34m2026-02-16 08:50:18.431 [I] [client/service.go:323] [f7ed7bf0dec748ba] login to server success, get run id [f7ed7bf0dec748ba]
+[0m[1;34m2026-02-16 08:50:18.431 [I] [proxy/proxy_manager.go:180] [f7ed7bf0dec748ba] proxy added: [mac_38080]
+[0m[1;34m2026-02-16 08:50:18.436 [I] [client/control.go:172] [f7ed7bf0dec748ba] [mac_38080] start proxy success
+[0m[1;34m2026-02-18 18:46:17.369 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;34m2026-02-18 18:46:17.395 [I] [client/service.go:323] [f7ed7bf0dec748ba] login to server success, get run id [f7ed7bf0dec748ba]
+[0m[1;34m2026-02-18 18:46:17.396 [I] [proxy/proxy_manager.go:180] [f7ed7bf0dec748ba] proxy added: [mac_38080]
+[0m[1;34m2026-02-18 18:46:17.401 [I] [client/control.go:172] [f7ed7bf0dec748ba] [mac_38080] start proxy success
+[0m[1;34m2026-02-21 03:43:26.264 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;34m2026-02-21 03:43:26.294 [I] [client/service.go:323] [f7ed7bf0dec748ba] login to server success, get run id [f7ed7bf0dec748ba]
+[0m[1;34m2026-02-21 03:43:26.295 [I] [proxy/proxy_manager.go:180] [f7ed7bf0dec748ba] proxy added: [mac_38080]
+[0m[1;34m2026-02-21 03:43:26.300 [I] [client/control.go:172] [f7ed7bf0dec748ba] [mac_38080] start proxy success
+[0m[1;34m2026-02-22 03:07:25.917 [I] [client/service.go:331] [f7ed7bf0dec748ba] try to connect to server...
+[0m[1;34m2026-02-22 03:07:25.938 [I] [client/service.go:323] [f7ed7bf0dec748ba] login to server success, get run id [f7ed7bf0dec748ba]
+[0m[1;34m2026-02-22 03:07:25.938 [I] [proxy/proxy_manager.go:180] [f7ed7bf0dec748ba] proxy added: [mac_38080]
+[0m[1;34m2026-02-22 03:07:25.943 [I] [client/control.go:172] [f7ed7bf0dec748ba] [mac_38080] start proxy success
+[0m

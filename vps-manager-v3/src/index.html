@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VPS Manager v3.1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            zinc: {
+              50: '#fafafa',
+              100: '#f4f4f5',
+              200: '#e4e4e7',
+              300: '#d4d4d8',
+              400: '#a1a1aa',
+              500: '#71717a',
+              600: '#52525b',
+              700: '#3f3f46',
+              800: '#27272a',
+              900: '#18181b',
+              950: '#09090b',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Menlo', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer components {
+      .card { @apply bg-white border border-zinc-200 rounded-lg p-6 shadow-sm mb-6; }
+      .btn { @apply px-4 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-1 inline-block cursor-pointer; }
+      .btn-primary { @apply bg-zinc-900 text-white hover:bg-zinc-800 border border-transparent; }
+      .btn-secondary { @apply bg-white border border-zinc-300 text-zinc-700 hover:bg-zinc-50; }
+      .btn-icon { @apply p-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-md; }
+      
+      .form-input, .form-select, .form-textarea { @apply w-full rounded-md border-zinc-300 shadow-sm focus:border-zinc-500 focus:ring-zinc-500 text-sm py-2 px-3 bg-white border; }
+      .form-label { @apply block text-sm font-medium text-zinc-700 mb-1; }
+      
+      .badge { @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium; }
+      .badge-success { @apply bg-emerald-100 text-emerald-800; }
+      .badge-warning { @apply bg-amber-100 text-amber-800; }
+      .badge-danger { @apply bg-rose-100 text-rose-800; }
+      .badge-primary { @apply bg-zinc-100 text-zinc-800; }
+      
+      .container { @apply max-w-5xl mx-auto px-4 py-8; }
+      .header { @apply flex items-center justify-between mb-8 pb-4 border-b border-zinc-200; }
+      .header h1 { @apply text-2xl font-bold tracking-tight text-zinc-900; }
+      .header-actions { @apply flex items-center gap-3; }
+      
+      .stats-grid { @apply grid grid-cols-2 md:grid-cols-4 gap-4 mb-6; }
+      .stat-card { @apply bg-white p-4 rounded-lg border border-zinc-200 shadow-sm; }
+      .stat-value { @apply text-2xl font-bold text-zinc-900 mb-1; }
+      .stat-label { @apply text-xs text-zinc-500 uppercase tracking-wider; }
+      
+      .vps-grid { @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6; }
+      .vps-card { @apply bg-white border border-zinc-200 rounded-lg p-5 hover:shadow-md transition-shadow relative overflow-hidden; }
+      .vps-card-header { @apply flex justify-between items-start mb-4; }
+      .vps-name { @apply font-semibold text-lg text-zinc-900 truncate pr-2; }
+      .vps-provider { @apply text-xs text-zinc-500 mt-0.5; }
+      
+      .vps-info { @apply space-y-2 text-sm text-zinc-600 mb-4; }
+      .vps-info-item { @apply flex justify-between items-center py-1 border-b border-zinc-50 last:border-0; }
+      .vps-info-label { @apply text-zinc-400 text-xs; }
+      .vps-info-value { @apply font-medium text-zinc-700; }
+      
+      .vps-progress { @apply mt-4; }
+      .progress-label { @apply flex justify-between text-xs text-zinc-500 mb-1; }
+      .progress-bar { @apply h-1.5 bg-zinc-100 rounded-full overflow-hidden; }
+      .progress-fill { @apply h-full bg-zinc-800 rounded-full; }
+      
+      .tabs { @apply flex space-x-1 border-b border-zinc-200 mb-6 overflow-x-auto; }
+      .tab-btn { @apply px-4 py-2 text-sm font-medium text-zinc-500 border-b-2 border-transparent hover:text-zinc-700 hover:border-zinc-300 transition-all whitespace-nowrap bg-transparent cursor-pointer; }
+      .tab-btn.active { @apply text-zinc-900 border-zinc-900; }
+      .tab-content { @apply hidden; }
+      .tab-content.active { @apply block; }
+      
+      .auth-page { @apply min-h-screen flex items-center justify-center bg-zinc-50 py-12 px-4 sm:px-6 lg:px-8; }
+      .auth-card { @apply max-w-md w-full space-y-8 bg-white p-8 rounded-xl border border-zinc-200 shadow-sm; }
+      .auth-card h2 { @apply text-center text-2xl font-bold text-zinc-900 mb-2; }
+      .auth-error { @apply text-rose-600 text-sm mt-2 text-center bg-rose-50 p-2 rounded; }
+      
+      .modal { @apply fixed inset-0 z-50 hidden overflow-y-auto; }
+      .modal.active { @apply block; }
+      .modal::before { content: ''; @apply fixed inset-0 bg-zinc-900/50 backdrop-blur-sm; }
+      .modal-content { @apply relative bg-white mx-auto mt-20 p-6 rounded-lg shadow-xl max-w-2xl w-full border border-zinc-200; }
+      .modal-header { @apply flex justify-between items-center mb-6 pb-4 border-b border-zinc-100; }
+      .modal-title { @apply text-xl font-bold text-zinc-900; }
+      .modal-close { @apply text-zinc-400 hover:text-zinc-900 text-2xl leading-none cursor-pointer border-0 bg-transparent; }
+      .modal-footer { @apply mt-8 pt-4 border-t border-zinc-100 flex justify-end gap-3; }
+
+      .form-group { @apply mb-4; }
+      .form-row { @apply grid grid-cols-1 md:grid-cols-2 gap-4; }
+      
+      .card-title { @apply text-lg font-semibold text-zinc-900 mb-4 flex items-center gap-2; }
+      .sort-controls { @apply flex flex-wrap gap-2 mb-4; }
+      .chart-container { @apply relative w-full; }
+      
+      .empty-state { @apply text-center py-12 px-4; }
+      .empty-state-icon { @apply text-4xl mb-3 block; }
+      .empty-state-title { @apply text-lg font-medium text-zinc-900 mb-1; }
+      .empty-state-description { @apply text-sm text-zinc-500; }
+
+      #toast-container { @apply fixed bottom-4 right-4 z-50 flex flex-col gap-2; }
+      .toast { @apply px-4 py-3 rounded-md shadow-lg text-sm font-medium flex items-center gap-2 min-w-[300px] bg-zinc-800 text-white; }
+      .toast.success { @apply bg-emerald-900 text-emerald-50; }
+      .toast.warning { @apply bg-amber-900 text-amber-50; }
+      .toast.error { @apply bg-rose-900 text-rose-50; }
+
+      @keyframes toastSlideOut {
+        to { opacity: 0; transform: translateY(100%); }
+      }
+    }
+    
+    body { @apply bg-zinc-50 text-zinc-800 antialiased; }
+  </style>
+</head>
+<body>
+  <div id="init-page" class="auth-page" style="display: none;">
+    <div class="auth-card">
+      <h2>初始化 VPS Manager</h2>
+      <p class="text-center text-zinc-500 text-sm mb-8">首次使用，请设置管理员账号</p>
+      <form id="init-form" onsubmit="handleInit(event)" class="space-y-6">
+        <div>
+          <label class="form-label">用户名</label>
+          <input type="text" id="init-username" class="form-input" placeholder="至少3个字符" required minlength="3">
+        </div>
+        <div>
+          <label class="form-label">密码</label>
+          <input type="password" id="init-password" class="form-input" placeholder="至少6个字符" required minlength="6">
+        </div>
+        <div>
+          <label class="form-label">确认密码</label>
+          <input type="password" id="init-password-confirm" class="form-input" placeholder="再次输入密码" required>
+        </div>
+        <div id="init-error" class="auth-error hidden"></div>
+        <button type="submit" class="btn btn-primary w-full py-2.5">创建管理员账号</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="login-page" class="auth-page" style="display: none;">
+    <div class="auth-card">
+      <h2>登录管理后台</h2>
+      <p class="text-center text-zinc-500 text-sm mb-8">请输入管理员账号密码</p>
+      <form id="login-form" onsubmit="handleLogin(event)" class="space-y-6">
+        <div>
+          <label class="form-label">用户名</label>
+          <input type="text" id="login-username" class="form-input" placeholder="用户名" required>
+        </div>
+        <div>
+          <label class="form-label">密码</label>
+          <input type="password" id="login-password" class="form-input" placeholder="密码" required>
+        </div>
+        <div id="login-error" class="auth-error hidden"></div>
+        <button type="submit" class="btn btn-primary w-full py-2.5">登录</button>
+      </form>
+      <div class="text-center mt-6">
+        <a href="#/" class="text-sm text-zinc-500 hover:text-zinc-900 transition-colors">← 返回公开页</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="public-page" style="display: none;">
+    <div class="container">
+      <header class="header">
+        <h1>VPS Manager</h1>
+        <div class="header-actions">
+          <button class="btn btn-primary" onclick="goToLogin()">管理登录</button>
+        </div>
+      </header>
+
+      <div class="card">
+        <div class="card-title">服务器状态概览</div>
+        <div class="stats-grid" id="public-stats">
+          <div class="stat-card"><div class="stat-value">-</div><div class="stat-label">服务器总数</div></div>
+          <div class="stat-card"><div class="stat-value">-</div><div class="stat-label">在线</div></div>
+          <div class="stat-card"><div class="stat-value">-</div><div class="stat-label">离线</div></div>
+          <div class="stat-card"><div class="stat-value">-</div><div class="stat-label">即将到期</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">服务器列表</div>
+        <div id="public-server-list" class="vps-grid"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">性价比排行</div>
+        <div id="public-rankings"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="admin-page" style="display: none;">
+    <div class="container">
+      <header class="header">
+        <h1>VPS Manager v3.1</h1>
+        <div class="header-actions">
+          <div class="flex items-center gap-3 mr-4 text-sm text-zinc-600 bg-zinc-100 px-3 py-1.5 rounded-full">
+            <span id="current-user"></span>
+            <button class="text-zinc-400 hover:text-zinc-900" onclick="handleLogout()">退出</button>
+          </div>
+          <button class="btn btn-secondary" onclick="exportData()">导出</button>
+          <button class="btn btn-secondary" onclick="importData()">导入</button>
+          <button class="btn btn-primary" onclick="openAddVpsModal()">添加 VPS</button>
+        </div>
+      </header>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('management')">批量管理</button>
+        <button class="tab-btn" onclick="switchTab('ranking')">性价比排行</button>
+        <button class="tab-btn" onclick="switchTab('nezha')">哪吒集成</button>
+        <button class="tab-btn" onclick="switchTab('decision')">续费决策</button>
+        <button class="tab-btn" onclick="switchTab('settings')">设置</button>
+      </div>
+
+      <div id="management" class="tab-content active">
+        <div class="card">
+          <div class="flex justify-between items-center mb-6">
+            <div class="card-title mb-0">VPS 列表</div>
+            <div class="sort-controls mb-0">
+              <span class="text-sm text-zinc-500 mr-2 self-center">排序:</span>
+              <button class="btn btn-secondary text-xs py-1" onclick="sortVps('remainingValue')">剩余价值</button>
+              <button class="btn btn-secondary text-xs py-1" onclick="sortVps('usageRate')">使用率</button>
+              <button class="btn btn-secondary text-xs py-1" onclick="sortVps('purchaseDate')">购买日期</button>
+              <button class="btn btn-secondary text-xs py-1" onclick="sortVps('provider')">服务商</button>
+            </div>
+          </div>
+          <div id="vps-list" class="vps-grid"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">价值趋势可视化</div>
+          <div class="mb-6 max-w-xs">
+            <label class="form-label">选择 VPS 查看价值衰减趋势</label>
+            <select id="trend-vps-select" class="form-select" onchange="updateTrendChart()">
+              <option value="">请选择一个 VPS</option>
+            </select>
+          </div>
+          <div class="chart-container h-80">
+            <canvas id="lineChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">统计概览</div>
+          <div class="stats-grid" id="stats-overview"></div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+            <div class="chart-container h-64">
+              <canvas id="pieChart"></canvas>
+            </div>
+            <div class="chart-container h-64">
+              <canvas id="barChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="ranking" class="tab-content">
+        <div class="card">
+          <div class="flex justify-between items-center mb-6">
+            <div class="card-title mb-0">性价比排行榜</div>
+            <div class="flex gap-2">
+              <button class="btn btn-secondary text-xs" onclick="loadRankings('overall')">综合</button>
+              <button class="btn btn-secondary text-xs" onclick="loadRankings('cpu')">CPU</button>
+              <button class="btn btn-secondary text-xs" onclick="loadRankings('memory')">内存</button>
+              <button class="btn btn-secondary text-xs" onclick="loadRankings('storage')">存储</button>
+              <button class="btn btn-secondary text-xs" onclick="loadRankings('network')">网络</button>
+            </div>
+          </div>
+          <div id="ranking-list"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">性价比统计报告</div>
+          <div id="ranking-report"></div>
+        </div>
+      </div>
+
+      <div id="nezha" class="tab-content">
+        <div class="card">
+          <div class="card-title">哪吒探针配置</div>
+          <div class="space-y-4 max-w-2xl">
+            <div>
+              <label class="form-label">API 地址 *</label>
+              <input type="text" id="nezha-api-url" class="form-input" placeholder="例如：https://nezha.example.com">
+            </div>
+            <div>
+              <label class="form-label">Bearer Token *</label>
+              <input type="password" id="nezha-token" class="form-input" placeholder="输入您的 API Token">
+            </div>
+            <div class="flex items-center pt-2">
+              <input type="checkbox" id="nezha-auto-sync" class="mr-2 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900">
+              <label for="nezha-auto-sync" class="text-sm text-zinc-700">启用自动同步（每小时）</label>
+            </div>
+            <div class="flex gap-3 pt-4">
+              <button class="btn btn-secondary" onclick="testNezhaConnection()">测试连接</button>
+              <button class="btn btn-primary" onclick="saveNezhaConfig()">保存配置</button>
+            </div>
+            <div id="nezha-test-result" class="mt-4"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">服务器列表同步</div>
+          <div class="max-w-2xl">
+            <button class="btn btn-primary w-full md:w-auto" onclick="syncNezhaServers()">立即同步服务器</button>
+            <div id="nezha-sync-result" class="mt-4"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="decision" class="tab-content">
+        <div class="card">
+          <div class="card-title">续费决策助手</div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="space-y-4">
+               <div class="bg-zinc-50 p-4 rounded-lg border border-zinc-200">
+                  <h4 class="font-medium text-zinc-900 mb-4 text-sm uppercase tracking-wide">当前方案</h4>
+                  <div class="form-row">
+                    <div>
+                      <label class="form-label">价格</label>
+                      <input type="number" id="current-price" class="form-input" placeholder="例如：100">
+                    </div>
+                    <div>
+                      <label class="form-label">货币</label>
+                      <select id="current-currency" class="form-select">
+                        <option value="CNY">CNY (人民币)</option>
+                        <option value="USD">USD (美元)</option>
+                        <option value="EUR">EUR (欧元)</option>
+                        <option value="GBP">GBP (英镑)</option>
+                        <option value="JPY">JPY (日元)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row mt-4">
+                    <div>
+                      <label class="form-label">周期</label>
+                      <select id="current-cycle" class="form-select">
+                        <option value="monthly">月付</option>
+                        <option value="yearly">年付</option>
+                        <option value="biennial">两年付</option>
+                        <option value="triennial">三年付</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="form-label">购买日期</label>
+                      <input type="date" id="current-purchase-date" class="form-input">
+                    </div>
+                  </div>
+               </div>
+
+               <div class="bg-zinc-50 p-4 rounded-lg border border-zinc-200">
+                  <h4 class="font-medium text-zinc-900 mb-4 text-sm uppercase tracking-wide">续费方案</h4>
+                  <div class="form-row">
+                    <div>
+                      <label class="form-label">价格</label>
+                      <input type="number" id="renewal-price" class="form-input" placeholder="例如：120">
+                    </div>
+                    <div>
+                      <label class="form-label">货币</label>
+                      <select id="renewal-currency" class="form-select">
+                        <option value="CNY">CNY (人民币)</option>
+                        <option value="USD">USD (美元)</option>
+                        <option value="EUR">EUR (欧元)</option>
+                        <option value="GBP">GBP (英镑)</option>
+                        <option value="JPY">JPY (日元)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row mt-4">
+                     <div>
+                       <label class="form-label">周期</label>
+                       <select id="renewal-cycle" class="form-select">
+                         <option value="monthly">月付</option>
+                         <option value="yearly">年付</option>
+                         <option value="biennial">两年付</option>
+                         <option value="triennial">三年付</option>
+                       </select>
+                     </div>
+                     <div>
+                       <label class="form-label">折扣码 (可选)</label>
+                       <input type="text" id="discount-code" class="form-input" placeholder="例如：SAVE20">
+                     </div>
+                  </div>
+                  <div class="mt-4">
+                    <label class="form-label">折扣百分比 (%)</label>
+                    <input type="number" id="discount-percent" class="form-input" placeholder="例如：20" min="0" max="100">
+                  </div>
+               </div>
+               
+               <button class="btn btn-primary w-full py-3" onclick="calculateDecision()">计算决策</button>
+            </div>
+            
+            <div id="decision-result" class="h-full">
+               <div class="empty-state bg-zinc-50 rounded-lg border border-zinc-200 h-full flex flex-col justify-center items-center">
+                  <div class="text-3xl mb-2">🤔</div>
+                  <div class="text-zinc-500">输入参数并点击计算以查看分析结果</div>
+               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="settings" class="tab-content">
+        <div class="card max-w-lg mx-auto">
+          <div class="card-title">修改密码</div>
+          <form onsubmit="handleChangePassword(event)" class="space-y-4">
+            <div>
+              <label class="form-label">当前密码</label>
+              <input type="password" id="old-password" class="form-input" required>
+            </div>
+            <div>
+              <label class="form-label">新密码</label>
+              <input type="password" id="new-password" class="form-input" placeholder="至少6个字符" required minlength="6">
+            </div>
+            <div>
+              <label class="form-label">确认新密码</label>
+              <input type="password" id="new-password-confirm" class="form-input" required>
+            </div>
+            <div id="password-error" class="auth-error hidden"></div>
+            <div id="password-success" class="text-emerald-600 text-sm hidden"></div>
+            <button type="submit" class="btn btn-primary w-full">修改密码</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="vps-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">添加 VPS</h2>
+        <button class="modal-close" onclick="closeVpsModal()">&times;</button>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="form-label">VPS 名称 *</label>
+          <input type="text" id="vps-name" class="form-input" placeholder="例如：阿里云香港 1C2G">
+        </div>
+
+        <div class="form-row">
+          <div>
+            <label class="form-label">服务商 *</label>
+            <input type="text" id="vps-provider" class="form-input" placeholder="例如：阿里云">
+          </div>
+          <div>
+            <label class="form-label">购买日期 *</label>
+            <input type="date" id="vps-purchase-date" class="form-input">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div>
+            <label class="form-label">价格 *</label>
+            <input type="number" id="vps-price" class="form-input" placeholder="例如：100">
+          </div>
+          <div>
+            <label class="form-label">货币 *</label>
+            <select id="vps-currency" class="form-select">
+              <option value="CNY">CNY (人民币)</option>
+              <option value="USD">USD (美元)</option>
+              <option value="EUR">EUR (欧元)</option>
+              <option value="GBP">GBP (英镑)</option>
+              <option value="JPY">JPY (日元)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="form-label">付款周期 *</label>
+          <select id="vps-cycle" class="form-select">
+            <option value="monthly">月付</option>
+            <option value="yearly">年付</option>
+            <option value="biennial">两年付</option>
+            <option value="triennial">三年付</option>
+          </select>
+        </div>
+
+        <div class="border-t border-zinc-100 pt-4 mt-6">
+          <div class="text-sm font-semibold text-zinc-900 mb-4">硬件配置 (可选)</div>
+          
+          <div class="form-row mb-4">
+            <div>
+              <label class="form-label">CPU 型号</label>
+              <input type="text" id="vps-cpu-model" class="form-input" placeholder="例如：AMD EPYC 7542" list="cpu-models-list">
+              <datalist id="cpu-models-list"></datalist>
+            </div>
+            <div>
+              <label class="form-label">CPU 核心数</label>
+              <input type="number" id="vps-cpu-cores" class="form-input" placeholder="例如：4" min="1">
+            </div>
+          </div>
+
+          <div class="form-row mb-4">
+            <div>
+              <label class="form-label">内存大小 (GB)</label>
+              <input type="number" id="vps-memory-size" class="form-input" placeholder="例如：8" min="0.5" step="0.5">
+            </div>
+            <div>
+              <label class="form-label">内存类型</label>
+              <select id="vps-memory-type" class="form-select">
+                <option value="">请选择</option>
+                <option value="DDR4">DDR4</option>
+                <option value="DDR5">DDR5</option>
+                <option value="DDR3">DDR3</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row mb-4">
+            <div>
+              <label class="form-label">存储大小 (GB)</label>
+              <input type="number" id="vps-storage-size" class="form-input" placeholder="例如：160" min="1">
+            </div>
+            <div>
+              <label class="form-label">存储类型</label>
+              <select id="vps-storage-type" class="form-select">
+                <option value="">请选择</option>
+                <option value="NVMe SSD">NVMe SSD</option>
+                <option value="SSD">SSD</option>
+                <option value="HDD">HDD</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row mb-4">
+            <div>
+              <label class="form-label">带宽 (Mbps)</label>
+              <input type="number" id="vps-network-bandwidth" class="form-input" placeholder="例如：1000" min="1">
+            </div>
+            <div>
+              <label class="form-label">月流量 (GB)</label>
+              <input type="number" id="vps-network-traffic" class="form-input" placeholder="例如：20000" min="0">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="form-label">备注</label>
+          <textarea id="vps-notes" class="form-textarea" rows="2" placeholder="记录一些额外信息..."></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeVpsModal()">取消</button>
+        <button class="btn btn-primary" onclick="saveVps()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="import-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">导入数据</h2>
+        <button class="modal-close" onclick="closeImportModal()">&times;</button>
+      </div>
+
+      <div class="py-8 text-center border-2 border-dashed border-zinc-200 rounded-lg bg-zinc-50">
+        <label class="cursor-pointer">
+          <span class="block text-4xl mb-2">📂</span>
+          <span class="text-sm text-zinc-600 block mb-4">点击选择 JSON 文件</span>
+          <input type="file" id="import-file" class="hidden" accept=".json">
+        </label>
+        <p class="text-xs text-zinc-400">仅支持 .json 格式的备份文件</p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeImportModal()">取消</button>
+        <button class="btn btn-primary" onclick="confirmImport()">确认导入</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

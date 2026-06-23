@@ -1,0 +1,12 @@
+serverAddr = "42.193.120.120"
+serverPort = 65535
+
+[auth]
+token = "jaUlTQzw8SsLdnKU"
+
+[[proxies]]
+name = "mac_38080"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 18789
+remotePort = 38080

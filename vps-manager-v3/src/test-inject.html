@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VPS Manager v3.0 - 测试数据注入</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 800px;
+      width: 100%;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .info {
+      background: #f0f7ff;
+      border-left: 4px solid #667eea;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+
+    .btn-inject {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-inject:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-clear {
+      background: #f44336;
+      color: white;
+    }
+
+    .btn-clear:hover {
+      background: #d32f2f;
+    }
+
+    .btn-view {
+      background: #4caf50;
+      color: white;
+    }
+
+    .btn-view:hover {
+      background: #45a049;
+    }
+
+    .status {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .status h3 {
+      margin-bottom: 10px;
+      color: #667eea;
+    }
+
+    .log-entry {
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .log-success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .log-error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .log-info {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .vps-preview {
+      background: #f9f9f9;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 VPS Manager v3.0 测试数据注入工具</h1>
+
+    <div class="info">
+      <strong>📋 测试数据说明：</strong>
+      <ul style="margin-left: 20px; margin-top: 10px;">
+        <li>共 8 个 VPS 实例</li>
+        <li>涵盖多个服务商（Vultr、DigitalOcean、腾讯云、AWS 等）</li>
+        <li>支持多种货币（USD、CNY、EUR）</li>
+        <li>不同付款周期（月付、年付）</li>
+        <li>不同购买日期（测试时间跨度）</li>
+      </ul>
+    </div>
+
+    <div class="button-group">
+      <button class="btn-inject" onclick="injectTestData()">
+        💉 注入测试数据
+      </button>
+      <button class="btn-clear" onclick="clearAllData()">
+        🗑️ 清空所有数据
+      </button>
+      <button class="btn-view" onclick="viewMainApp()">
+        👀 查看主应用
+      </button>
+    </div>
+
+    <div class="status" id="status">
+      <h3>📊 操作日志</h3>
+      <div class="log-entry log-info">等待操作...</div>
+    </div>
+  </div>
+
+  <script>
+    // 测试数据
+    const testData = {
+      version: '3.0.0',
+      vpsList: [
+        {
+          id: 'vps-001',
+          name: 'Vultr Tokyo',
+          provider: 'Vultr',
+          totalCost: 120,
+          currency: 'USD',
+          cycle: 'yearly',
+          purchaseDate: '2024-06-01',
+          notes: '博客服务器'
+        },
+        {
+          id: 'vps-002',
+          name: 'DigitalOcean NYC',
+          provider: 'DigitalOcean',
+          totalCost: 60,
+          currency: 'USD',
+          cycle: 'yearly',
+          purchaseDate: '2025-01-01',
+          notes: 'API 服务器'
+        },
+        {
+          id: 'vps-003',
+          name: '腾讯云深圳',
+          provider: '腾讯云',
+          totalCost: 288,
+          currency: 'CNY',
+          cycle: 'yearly',
+          purchaseDate: '2024-11-11',
+          notes: 'CDN 加速'
+        },
+        {
+          id: 'vps-004',
+          name: 'Linode Singapore',
+          provider: 'Linode',
+          totalCost: 48,
+          currency: 'USD',
+          cycle: 'yearly',
+          purchaseDate: '2025-09-01',
+          notes: '数据库服务器'
+        },
+        {
+          id: 'vps-005',
+          name: 'AWS Tokyo',
+          provider: 'AWS',
+          totalCost: 240,
+          currency: 'USD',
+          cycle: 'yearly',
+          purchaseDate: '2024-03-15',
+          notes: '生产环境'
+        },
+        {
+          id: 'vps-006',
+          name: '阿里云杭州',
+          provider: '阿里云',
+          totalCost: 99,
+          currency: 'CNY',
+          cycle: 'monthly',
+          purchaseDate: '2025-12-01',
+          notes: '测试环境'
+        },
+        {
+          id: 'vps-007',
+          name: 'Hetzner Germany',
+          provider: 'Hetzner',
+          totalCost: 39,
+          currency: 'EUR',
+          cycle: 'yearly',
+          purchaseDate: '2024-08-20',
+          notes: '备份服务器'
+        },
+        {
+          id: 'vps-008',
+          name: 'OVH France',
+          provider: 'OVH',
+          totalCost: 72,
+          currency: 'EUR',
+          cycle: 'yearly',
+          purchaseDate: '2025-05-10',
+          notes: '文件存储'
+        }
+      ],
+      settings: {
+        defaultCurrency: 'CNY',
+        autoRefresh: true,
+        theme: 'light'
+      }
+    };
+
+    // 日志函数
+    function addLog(message, type = 'info') {
+      const statusDiv = document.getElementById('status');
+      const logEntry = document.createElement('div');
+      logEntry.className = `log-entry log-${type}`;
+      logEntry.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
+      statusDiv.appendChild(logEntry);
+      statusDiv.scrollTop = statusDiv.scrollHeight;
+    }
+
+    // 注入测试数据
+    function injectTestData() {
+      try {
+        addLog('🚀 开始注入测试数据...', 'info');
+
+        // 保存到 localStorage
+        localStorage.setItem('vps-manager-data', JSON.stringify(testData));
+
+        addLog(`✅ 成功注入 ${testData.vpsList.length} 个 VPS 实例`, 'success');
+
+        // 显示每个 VPS 的详情
+        testData.vpsList.forEach((vps, index) => {
+          const preview = document.createElement('div');
+          preview.className = 'vps-preview';
+          preview.innerHTML = `
+            <strong>${index + 1}. ${vps.name}</strong> (${vps.provider})<br>
+            💰 ${vps.totalCost} ${vps.currency} - ${vps.cycle === 'monthly' ? '月付' : '年付'} | 📅 ${vps.purchaseDate}<br>
+            📝 ${vps.notes}
+          `;
+          document.getElementById('status').appendChild(preview);
+        });
+
+        addLog('📊 数据统计:', 'info');
+        addLog(`- USD VPS: ${testData.vpsList.filter(v => v.currency === 'USD').length} 个`, 'info');
+        addLog(`- CNY VPS: ${testData.vpsList.filter(v => v.currency === 'CNY').length} 个`, 'info');
+        addLog(`- EUR VPS: ${testData.vpsList.filter(v => v.currency === 'EUR').length} 个`, 'info');
+        addLog(`- 年付 VPS: ${testData.vpsList.filter(v => v.cycle === 'yearly').length} 个`, 'info');
+        addLog(`- 月付 VPS: ${testData.vpsList.filter(v => v.cycle === 'monthly').length} 个`, 'info');
+
+        addLog('🎉 测试数据注入完成！现在可以查看主应用', 'success');
+
+      } catch (error) {
+        addLog(`❌ 注入失败: ${error.message}`, 'error');
+      }
+    }
+
+    // 清空所有数据
+    function clearAllData() {
+      if (confirm('确定要清空所有数据吗？此操作不可撤销！')) {
+        try {
+          localStorage.removeItem('vps-manager-data');
+          addLog('🗑️ 所有数据已清空', 'success');
+        } catch (error) {
+          addLog(`❌ 清空失败: ${error.message}`, 'error');
+        }
+      }
+    }
+
+    // 查看主应用
+    function viewMainApp() {
+      window.location.href = '/index.html';
+    }
+
+    // 页面加载时检查现有数据
+    window.onload = function() {
+      const existingData = localStorage.getItem('vps-manager-data');
+      if (existingData) {
+        try {
+          const data = JSON.parse(existingData);
+          addLog(`📦 检测到现有数据: ${data.vpsList?.length || 0} 个 VPS`, 'info');
+        } catch (e) {
+          addLog('⚠️ 现有数据格式错误', 'error');
+        }
+      } else {
+        addLog('📭 暂无数据', 'info');
+      }
+    };
+  </script>
+</body>
+</html>

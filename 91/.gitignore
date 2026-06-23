@@ -1,0 +1,10 @@
+# 视频和数据
+downloads/
+test_download/
+data/
+venv/
+*.json
+pi-session-*.html
+
+# 系统文件
+.DS_Store
