@@ -2,6 +2,49 @@
 
 包含多个视频网站的独立爬虫脚本。
 
+## crawler.v3 后端接入脚本
+
+新增以下 7 个可独立复制运行的 Python 脚本，适配支持 `crawler.v3` 的后端。它们与下方旧版下载器和 Web 管理界面并存，**不是旧 Web 界面的直接替换件**。
+
+| 脚本 | 目标网站 | 默认栏目 | 配置说明 |
+| --- | --- | --- | --- |
+| [Hsex/Hsex.py](Hsex/Hsex.py) | hsex.icu | latest（最新） | [README](Hsex/README.md) |
+| [Kanav/Kanav.py](Kanav/Kanav.py) | kanav.ad | home（首页精选） | [README](Kanav/README.md) |
+| [MemoJav/MemoJav.py](MemoJav/MemoJav.py) | memojav.org | milf | [README](MemoJav/README.md) |
+| [Pektino/Pektino.py](Pektino/Pektino.py) | pektino.com | weekly（周榜） | [README](Pektino/README.md) |
+| [Porny91/Porny91.py](Porny91/Porny91.py) | 91porny.com | top-list（本月最热） | [README](Porny91/README.md) |
+| [Xhotlist/Xhotlist.py](Xhotlist/Xhotlist.py) | xhotvideo.com | latest（最新） | [README](Xhotlist/README.md) |
+| [XiaoHuangNiao/XiaoHuangNiao.py](XiaoHuangNiao/XiaoHuangNiao.py) | xiaohuangniao.me | hot-tweets | [README](XiaoHuangNiao/README.md) |
+
+协议依据：[SpiderFor91 / CRAWLER_PROTOCOL.md](https://github.com/Just-Spider/SpiderFor91/blob/a5578164706a12db83cf335b2c44e66c7deaa057/CRAWLER_PROTOCOL.md)。
+
+### V3 使用方式
+
+```bash
+python3 -m pip install -r requirements.txt
+python3 Hsex/Hsex.py --job /absolute/path/job.json
+```
+
+任务包含 `protocol: "crawler.v3"`、`task_id`、`crawler_id`、`feed_id`、绝对路径 `work_dir`，以及可选对象 `config` / `network`。完整任务及交互示例见各站点 README。
+
+脚本持续读取 stdin JSONL：`discover → page`、`resolve → item`、`stop → stopped`；stdout 只输出协议 JSON，日志走 stderr。媒体由后端下载，脚本返回 URL 及独立请求头。不兼容旧 `crawler.v2` 的自主 `item/progress/done` 流和预算/seen 文件参数；后端负责去重、任务目标、时限和重试。
+
+### 离线回归测试
+
+```bash
+python3 -B -m unittest discover -s tests -v
+```
+
+测试使用合成 HTML/JSON、HTTP mock、本地 loopback 和独立单文件子进程，不访问真实源站。当前共 47 项（Hsex 28 项，其他 V3 脚本 19 项），覆盖声明和任务校验、分页/重试稳定性、媒体结构、错误映射、超时、身份保留、无自动重试和请求头隔离。Pektino 保留 API 直连、Twitter 媒体使用配置代理的既有策略。
+
+Hsex 已小范围在线验证最新列表、单条详情、V3 命令流程及 HLS 清单 HTTP 200；未验证媒体分片/完整下载或逐一验证其他栏目。其他站点的测试通过仅证明离线协议行为，不保证源站持续可用。
+
+---
+
+## 原有独立下载器
+
+下方保留原仓库的用法和历史说明；其中状态为原文记录，并非本次重新实测结论。
+
 ## 爬虫列表
 
 | 脚本 | 目标网站 | 状态 |
